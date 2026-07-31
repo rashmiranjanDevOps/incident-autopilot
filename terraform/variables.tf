@@ -19,7 +19,7 @@ variable "project_name" {
 variable "worker_reserved_concurrency" {
   description = "Deliberately low — this is what scripts/chaos.sh exceeds to demo scenario 1"
   type        = number
-  default     = 2
+  default     = -1
 }
 
 variable "worker_max_reserved_concurrency" {
