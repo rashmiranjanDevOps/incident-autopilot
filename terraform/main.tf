@@ -62,7 +62,7 @@ resource "aws_iam_role" "github_actions" {
         }
         # Scoped to this one repo, so no other GitHub repo can assume this role.
         StringLike = {
-          "token.actions.githubusercontent.com:sub" = "repo:${var.github_repo}:*"
+          "token.actions.githubusercontent.com:sub" = "repo:${split("/", var.github_repo)[0]}@*/${split("/", var.github_repo)[1]}@*:*"
         }
       }
     }]
