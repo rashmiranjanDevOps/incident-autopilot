@@ -151,3 +151,7 @@ Things I thought about and deliberately left out for now, rather than things I f
 - A second safe remediation action (right now there's only one)
 - Tiered escalation (right now everything goes to one Slack channel — a real on-call setup would route by severity)
 - Multi-region — not something a demo project like this needs, but worth knowing how I'd approach it
+
+
+
+<!-- CI test trigger -->
