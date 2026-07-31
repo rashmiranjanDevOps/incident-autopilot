@@ -174,13 +174,24 @@ resource "aws_iam_role_policy" "github_actions_project" {
           "logs:PutRetentionPolicy", "logs:TagResource",
           "logs:PutMetricFilter", "logs:DeleteMetricFilter", "logs:DescribeMetricFilters",
         ]
-        Resource = "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/incident-autopilot-*"
+        Resource = "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:*"
       },
       {
         Sid      = "ManageAlarms"
         Effect   = "Allow"
-        Action   = ["cloudwatch:PutMetricAlarm", "cloudwatch:DeleteAlarms", "cloudwatch:DescribeAlarms"]
+        Action   = ["cloudwatch:PutMetricAlarm", "cloudwatch:DeleteAlarms", "cloudwatch:DescribeAlarms", "cloudwatch:ListTagsForResource"]
         Resource = "arn:aws:cloudwatch:${var.aws_region}:${data.aws_caller_identity.current.account_id}:alarm:incident-autopilot-*"
+      },
+      {
+        Sid    = "ManageGithubOidcProvider"
+        Effect = "Allow"
+        Action = [
+          "iam:GetOpenIDConnectProvider", "iam:CreateOpenIDConnectProvider",
+          "iam:DeleteOpenIDConnectProvider", "iam:UpdateOpenIDConnectProviderThumbprint",
+          "iam:TagOpenIDConnectProvider", "iam:UntagOpenIDConnectProvider",
+          "iam:ListOpenIDConnectProviderTags",
+        ]
+        Resource = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"
       },
     ]
   })
