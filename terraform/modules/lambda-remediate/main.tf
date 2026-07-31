@@ -73,9 +73,9 @@ resource "aws_lambda_function" "remediate" {
 
   environment {
     variables = {
-      WORKER_FUNCTION_NAME      = var.worker_function_name
-      MAX_RESERVED_CONCURRENCY  = tostring(var.max_reserved_concurrency)
-      CONCURRENCY_INCREMENT     = tostring(var.concurrency_increment)
+      WORKER_FUNCTION_NAME     = var.worker_function_name
+      MAX_RESERVED_CONCURRENCY = tostring(var.max_reserved_concurrency)
+      CONCURRENCY_INCREMENT    = tostring(var.concurrency_increment)
     }
   }
 

@@ -1,5 +1,5 @@
-variable "name_prefix"      { type = string }
-variable "audit_table_arn"  { type = string }
+variable "name_prefix" { type = string }
+variable "audit_table_arn" { type = string }
 variable "audit_table_name" { type = string }
 variable "slack_secret_arn" { type = string }
 
