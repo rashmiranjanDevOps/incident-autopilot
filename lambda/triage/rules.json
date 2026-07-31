@@ -1,0 +1,20 @@
+{
+  "incident-autopilot-worker-throttling": {
+    "severity": "low",
+    "safe_to_remediate": true,
+    "action": "increase_worker_concurrency",
+    "description": "Worker Lambda is throttling — reserved concurrency is too low for current load"
+  },
+  "incident-autopilot-dlq-depth": {
+    "severity": "medium",
+    "safe_to_remediate": false,
+    "action": null,
+    "description": "Messages have exhausted retries and landed in the dead-letter queue. Redriving unknown poison messages automatically risks an infinite retry loop, so this always goes to a human."
+  },
+  "incident-autopilot-permission-failure": {
+    "severity": "high",
+    "safe_to_remediate": false,
+    "action": null,
+    "description": "Worker Lambda hit an AccessDenied error. Permission issues are never auto-remediated — automatically 'fixing' IAM is itself a security risk."
+  }
+}

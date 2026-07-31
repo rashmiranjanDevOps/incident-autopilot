@@ -1,0 +1,78 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  id-token: write   # required to request the OIDC token
+  contents: read
+
+jobs:
+  # Runs first and independently of Terraform — no point spending time on
+  # a plan/apply if the Lambda code itself is broken.
+  test-lambdas:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        function: [worker, remediate, triage, digest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install test dependencies
+        run: pip install pytest boto3
+
+      - name: Run tests for ${{ matrix.function }}
+        working-directory: lambda/${{ matrix.function }}
+        run: python -m pytest -v
+
+  terraform:
+    needs: test-lambdas
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.6.6"
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Terraform fmt check
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init
+        run: terraform init -backend-config=backend.hcl
+
+      - name: Terraform validate
+        run: terraform validate
+
+      - name: Terraform plan
+        run: terraform plan -out=tfplan
+
+      # Only apply on a real push to main, never on a pull request — a PR
+      # should show you what WOULD change, not change anything. Lambda
+      # packaging happens automatically as part of this step: each
+      # lambda-* module zips its own source directory via the archive
+      # provider, so there's no separate "build" step to keep in sync.
+      - name: Terraform apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve tfplan

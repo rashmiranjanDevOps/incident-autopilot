@@ -1,0 +1,28 @@
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+crash.*.log
+tfplan
+*.tfplan
+
+# Python (Lambda source)
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# Packaged Lambda zips (built by CI, not committed)
+*.zip
+
+# Env / secrets
+.env
+.env.*
+
+# OS / editor
+.DS_Store
+.vscode/
