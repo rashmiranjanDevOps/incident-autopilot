@@ -150,7 +150,7 @@ resource "aws_iam_role_policy" "github_actions_project" {
         Action = [
           "lambda:CreateEventSourceMapping", "lambda:GetEventSourceMapping",
           "lambda:UpdateEventSourceMapping", "lambda:DeleteEventSourceMapping",
-          "lambda:ListEventSourceMappings",
+          "lambda:ListEventSourceMappings", "lambda:ListTags",
         ]
         Resource = "*" # this API family has no resource-level ARN scoping
       },
