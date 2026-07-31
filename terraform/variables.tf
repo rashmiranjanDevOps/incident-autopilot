@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "github_repo" {
   description = "owner/repo allowed to assume the GitHub Actions deploy role, e.g. \"yourusername/incident-autopilot\""
   type        = string
-  default     = "rashmiranjandevops/incident-autopilot"
+  default     = "rashmiranjanDevOps/incident-autopilot"
 }
 
 variable "project_name" {

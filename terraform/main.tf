@@ -171,7 +171,7 @@ resource "aws_iam_role_policy" "github_actions_project" {
         Effect = "Allow"
         Action = [
           "logs:CreateLogGroup", "logs:DeleteLogGroup", "logs:DescribeLogGroups",
-          "logs:PutRetentionPolicy", "logs:TagResource",
+          "logs:PutRetentionPolicy", "logs:TagResource", "logs:ListTagsForResource",
           "logs:PutMetricFilter", "logs:DeleteMetricFilter", "logs:DescribeMetricFilters",
         ]
         Resource = "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:*"
