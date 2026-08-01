@@ -25,7 +25,6 @@ import boto3
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-sqs = boto3.client("sqs")
 QUEUE_URL = os.environ.get("QUEUE_URL", "")
 
 
@@ -58,6 +57,7 @@ def handler(event, context):
         receipt_handle = record.get("receiptHandle")
         if receipt_handle and QUEUE_URL:
             try:
+                sqs = boto3.client("sqs")
                 sqs.delete_message(QueueUrl=QUEUE_URL, ReceiptHandle=receipt_handle)
             except Exception:
                 logger.error("AccessDenied deleting message from queue", exc_info=True)
