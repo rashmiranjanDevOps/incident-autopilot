@@ -79,6 +79,12 @@ resource "aws_lambda_function" "worker" {
   filename         = data.archive_file.worker.output_path
   source_code_hash = data.archive_file.worker.output_base64sha256
 
+  environment {
+    variables = {
+      QUEUE_URL = var.queue_url
+    }
+  }
+
   depends_on = [aws_cloudwatch_log_group.worker]
 }
 

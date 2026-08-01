@@ -211,6 +211,7 @@ module "lambda_worker" {
   source               = "./modules/lambda-worker"
   name_prefix          = local.name_prefix
   queue_arn            = module.core.queue_arn
+  queue_url            = module.core.queue_url
   reserved_concurrency = var.worker_reserved_concurrency
 }
 

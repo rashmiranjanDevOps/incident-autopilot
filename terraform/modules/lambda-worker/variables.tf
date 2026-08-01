@@ -12,3 +12,8 @@ variable "reserved_concurrency" {
   type        = number
   default     = 2
 }
+
+variable "queue_url" {
+  description = "URL of the SQS work queue this function consumes from — used for explicit message deletion, see handler.py"
+  type        = string
+}

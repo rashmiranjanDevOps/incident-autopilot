@@ -6,12 +6,27 @@ fails (see scripts/simulate-dlq.sh) — that's how the DLQ demo works.
 The throttling demo doesn't touch this file at all; it's just what
 happens when scripts/chaos.sh sends more messages than the function's
 reserved concurrency can handle.
+
+Message deletion is explicit (see handler(), below) rather than left to
+Lambda's implicit delete-on-success behavior. Implicit deletion happens
+in AWS's own SQS poller, outside this function's execution — so if the
+worker's role ever lost sqs:DeleteMessage, that failure would happen
+invisibly, with nothing in these logs to show it. Deleting explicitly
+means a permission failure here actually gets logged, which is what the
+"permission failure" alarm's metric filter watches for — see
+docs/RUNBOOK.md and scripts/simulate-permission-failure.sh.
 """
 import json
 import logging
+import os
+
+import boto3
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
+
+sqs = boto3.client("sqs")
+QUEUE_URL = os.environ.get("QUEUE_URL", "")
 
 
 def process_message(body: dict) -> None:
@@ -39,5 +54,12 @@ def handler(event, context):
             raise
 
         process_message(body)
+
+        receipt_handle = record.get("receiptHandle")
+        if receipt_handle and QUEUE_URL:
+            try:
+                sqs.delete_message(QueueUrl=QUEUE_URL, ReceiptHandle=receipt_handle)
+            except Exception:
+                logger.error("AccessDenied deleting message from queue", exc_info=True)
 
     return {"statusCode": 200}
