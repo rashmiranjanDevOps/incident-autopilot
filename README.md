@@ -32,7 +32,7 @@ answering that specifically: how do you notice a failure, decide if it's
 safe to fix without a person involved, actually fix it if so, and leave a
 trail either way so nobody has to guess what happened later.
 
-## Architecture
+<!-- ## Architecture
 
 ```mermaid
 flowchart TD
@@ -74,7 +74,7 @@ that log and posts a summary.
 Only Triage ever posts to Slack or writes to the audit log — Remediate
 just does its one job and reports back to Triage, it doesn't talk to
 Slack or DynamoDB directly. More detail on how this fits together (and
-why I made a few of the choices I did) is in
+why I made a few of the choices I did) is in -->
 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## Tech stack
