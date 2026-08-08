@@ -177,14 +177,17 @@ worth more than pretending it just worked first try:
 
 ## Screenshots
 
+**Project Architecture:**
+![Architecture](docs/screenshots/Architecture.png)
+
 **Infrastructure deployed from scratch:**
 ![Terraform apply complete](docs/screenshots/terraform-apply.png)
 
 **Tests + deploy, fully automated:**
 ![GitHub Actions passing](docs/screenshots/github-actions-green.png)
 
-**A real incident, detected:**
-![CloudWatch alarm firing](docs/screenshots/cloudwatch-alarm.png)
+<!-- **A real incident, detected:**
+![CloudWatch alarm firing](docs/screenshots/cloudwatch-alarm.png) -->
 
 **...and the worker's actual error, logged properly (this is the bug fix
 described above, proven working):**
